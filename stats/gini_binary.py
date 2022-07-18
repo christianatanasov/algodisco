@@ -3,7 +3,7 @@ import pandas as pd
 
 def gini(df : pd.DataFrame, x_col, y_col):
     """
-    Gini impurity calculator;
+    Gini impurity calculator for binary variables;
     First step is to define all possible values (x) which could be decision making.
     s_l and s_r are the two new states for <x< (called left and right here)
     w_l and w_r are the weights or the sizes of the new states
