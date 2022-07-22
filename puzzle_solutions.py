@@ -41,7 +41,7 @@ def remove_non_primes(l):
     for x in l:
         for y in l:
             if y % x == 0 and x != y:
-                l.remove(y)
+                l.remove(y) # Mutable lists lovely :)
     return l
 
 
@@ -63,7 +63,6 @@ def f7a():
     while x > 7 or x == 2:
         x = f4() + f4()
     return x
-
 
 def f7b():
     map7 = dict(zip([tuple(z) for z in [[tuple(y) for y in x] for x in np.split(np.array(list(itertools.product(range(1,5), range(1,5)))[:-2]), 7)]], range(1,8)))
