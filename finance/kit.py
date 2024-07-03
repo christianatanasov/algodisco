@@ -27,7 +27,7 @@ def portfolio_vol(weights, covmat): # A bit unconventional with the loop, but fi
     return np.sqrt(vol)
 
 def annualize_returns(r, intervals, periods):
-    return np.exp(np.log1p(returns).sum()) ** (periods / intervals) - 1
+    return np.exp(np.log1p(r).sum()) ** (periods / intervals) - 1
 
 def annualize_vol(r, intervals):
     return r.std() * np.sqrt(intervals)
