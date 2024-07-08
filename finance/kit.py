@@ -43,8 +43,7 @@ def pv(l, r): #Present value
         dates = (l.index - datetime.date.today()).days / 360
     else:
         dates = l.index
-    d = d_flat(dates, r)
-    return (d * (l['LIABILITIES'])).sum() #This is wrong fix it
+    return d_flat(dates, r)
 
 def fr(a, l, r): #Funding ratio for given assets a and liabilities l and a flat yield curve at r
     return a / pv(l,r)
