@@ -1,3 +1,4 @@
+#This module is to keep all of the functions used in each different notebook, so they can be reused and easily imported
 import warnings
 import datetime
 import itertools
@@ -71,3 +72,8 @@ def get_usd_mcap(ticker):
         fx = yf.Ticker('{}USD=X'.format(ccy)).info['previousClose']
         return mcap * fx
     return mcap
+
+def get_dividends(ticker, start_year, end_year=datetime.date.today().year):
+    df = yf.Ticker(ticker).get_dividends().to_frame()
+    df.index = df.index.to_period('D').to_timestamp()
+    return df[str(start_year) : str(end_year)].rename(columns={'Dividends' : '{}_DIV'.format(ticker)})
