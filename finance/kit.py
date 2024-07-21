@@ -76,4 +76,11 @@ def get_usd_mcap(ticker):
 def get_dividends(ticker, start_year, end_year=datetime.date.today().year):
     df = yf.Ticker(ticker).get_dividends().to_frame()
     df.index = df.index.to_period('D').to_timestamp()
+    df['YEAR'] = df.index.year
     return df[str(start_year) : str(end_year)].rename(columns={'Dividends' : '{}_DIV'.format(ticker)})
+
+def get_div_return(div_df, ticker, rf):
+    div_df['DAYS_TO_EOY'] = (div_df['YEAR'].apply(lambda c: datetime.date(c, 12, 31)) - div_df.index.date).dt.days
+    div_df = div_df.merge(rf, left_index=True, right_index=True)
+    div_df['{}_DIV_EOY'.format(ticker)] = np.exp(div_df['^IRX'] * div_df['DAYS_TO_EOY'] / 365) * div_df['{}_DIV'.format(ticker)]
+    return div_df
