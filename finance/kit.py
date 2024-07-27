@@ -65,6 +65,14 @@ def get_yf_ts(ticker, period, interval):
     df.index = df.index.to_period(interval_dict[interval])
     return df
 
+def get_mcap(ticker, usd=True):
+    info = yf.Ticker(ticker).info
+    mcap, ccy = info['marketCap'], info['currency']
+    if usd and ccy != 'USD': # If not a US stock, convert market cap in USD using previous close FX
+        fx = yf.Ticker('{}USD=X'.format(ccy)).info['previousClose']
+        return mcap * fx
+    return mcap
+
 def get_usd_mcap(ticker):
     info = yf.Ticker(ticker).info
     mcap, ccy = info['marketCap'], info['currency']
