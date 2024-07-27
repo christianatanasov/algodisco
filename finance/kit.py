@@ -86,3 +86,5 @@ def get_div_return(div_df, ticker, rf):
     div_df = div_df.merge(rf, left_index=True, right_index=True)
     div_df['{}_DIV_EOY'.format(ticker)] = np.exp(div_df['^IRX'] * div_df['DAYS_TO_EOY'] / 365) * div_df['{}_DIV'.format(ticker)]
     return div_df
+
+futures_fp = lambda S, rf, b, div, T_frac : S * np.exp((rf - b) * T_frac) - div
