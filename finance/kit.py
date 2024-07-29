@@ -96,3 +96,22 @@ def get_div_return(div_df, ticker, rf):
     return div_df
 
 futures_fp = lambda S, rf, b, div, T_frac : S * np.exp((rf - b) * T_frac) - div
+
+def d1(S, K, r, dt, sigma):
+    return (np.log(S/K) + (r + np.sqrt(sigma) * .5 * dt)) / (sigma * np.sqrt(dt))
+
+def d2(S, K, r, dt, sigma):
+    return d1(S, K, r, dt, sigma) - sigma * np.sqrt(dt)
+
+def call(S, K, r, dt, sigma):
+    return S * sp.stats.norm.cdf(d1(S, K, r, dt, sigma)) - K * np.exp(-r * dt) * sp.stats.norm.cdf(d2(S, K, r, dt, sigma))
+
+def iv(C, S, K, r, dt, init_sigma=0.2):
+    def call_diff(sigma, S, K, r, dt, C):
+        return C - call(S, K, r, dt, sigma)
+    return sp.optimize.least_squares(call_diff, init_sigma, kwargs={"C" : C, "S" : S, "K" : K, "r" : r, "dt" : dt}, loss='linear').x[0]
+
+def iv2(C, S, K, r, dt):
+    for sigma in np.linspace(0, 3, 1000):
+        if (C - call(S, K, r, dt, sigma)) < 1e-4:
+            return sigma
