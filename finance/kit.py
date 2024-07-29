@@ -106,12 +106,7 @@ def d2(S, K, r, dt, sigma):
 def call(S, K, r, dt, sigma):
     return S * sp.stats.norm.cdf(d1(S, K, r, dt, sigma)) - K * np.exp(-r * dt) * sp.stats.norm.cdf(d2(S, K, r, dt, sigma))
 
-def iv(C, S, K, r, dt, init_sigma=0.2):
-    def call_diff(sigma, S, K, r, dt, C):
-        return C - call(S, K, r, dt, sigma)
-    return sp.optimize.least_squares(call_diff, init_sigma, kwargs={"C" : C, "S" : S, "K" : K, "r" : r, "dt" : dt}, loss='linear').x[0]
-
-def iv2(C, S, K, r, dt):
+def iv(C, S, K, r, dt):
     for sigma in np.linspace(0, 3, 1000):
         if (C - call(S, K, r, dt, sigma)) < 1e-4:
             return sigma
