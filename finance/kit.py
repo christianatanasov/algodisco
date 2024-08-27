@@ -98,13 +98,13 @@ def get_div_return(div_df, ticker, rf):
 futures_fp = lambda S, rf, b, div, T_frac : S * np.exp((rf - b) * T_frac) - div
 
 def d1(S, K, r, dt, sigma):
-    return (np.log(S/K) + (r + np.sqrt(sigma) * .5 * dt)) / (sigma * np.sqrt(dt))
+    return (np.log(S/K) + (r + np.power(sigma, 2) * .5 )* dt) / (sigma * np.sqrt(dt))
 
 def d2(S, K, r, dt, sigma):
     return d1(S, K, r, dt, sigma) - sigma * np.sqrt(dt)
 
 def call(S, K, r, dt, sigma):
-    return S * sp.stats.norm.cdf(d1(S, K, r, dt, sigma)) - K * np.exp(-r * dt) * sp.stats.norm.cdf(d2(S, K, r, dt, sigma))
+    return S * norm.cdf(d1(S, K, r, dt, sigma)) - K * np.exp(-r * dt) * norm.cdf(d2(S, K, r, dt, sigma))
 
 def iv(C, S, K, r, dt):
     for sigma in np.linspace(0, 3, 1000):
