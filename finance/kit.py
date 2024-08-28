@@ -104,9 +104,9 @@ def d2(S, K, r, dt, sigma):
     return d1(S, K, r, dt, sigma) - sigma * np.sqrt(dt)
 
 def call(S, K, r, dt, sigma):
-    return S * norm.cdf(d1(S, K, r, dt, sigma)) - K * np.exp(-r * dt) * norm.cdf(d2(S, K, r, dt, sigma))
+    return S * sp.stats.norm.cdf(d1(S, K, r, dt, sigma)) - K * np.exp(-r * dt) * sp.stats.norm.cdf(d2(S, K, r, dt, sigma))
 
 def iv(C, S, K, r, dt):
-    for sigma in np.linspace(0, 3, 1000):
-        if (C - call(S, K, r, dt, sigma)) < 1e-4:
+    for sigma in np.linspace(0.01, 3, 500):
+        if (C - call(S, K, r, dt, sigma)) < 1e-3:
             return sigma
